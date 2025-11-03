@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Skuter qo'shish</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <!-- Istasangiz Bootstrap yoki Tailwind qo'shishingiz mumkin -->
+</head>
+<body>
+  <main style="max-width:720px;margin:40px auto;padding:16px;border:1px solid #eee;border-radius:8px;">
+    <h1>Yangi skuter qo'shish</h1>
+
+    {% if form.non_field_errors %}
+      <div style="color:red;margin-bottom:12px;">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.nom.id_for_label }}">Nomi</label><br>
+        {{ form.nom }}
+        {% if form.nom.errors %}<div style="color:red">{{ form.nom.errors }}</div>{% endif %}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.model.id_for_label }}">Modeli</label><br>
+        {{ form.model }}
+        {% if form.model.errors %}<div style="color:red">{{ form.model.errors }}</div>{% endif %}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.yil.id_for_label }}">Yili</label><br>
+        {{ form.yil }}
+        {% if form.yil.errors %}<div style="color:red">{{ form.yil.errors }}</div>{% endif %}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.narx_soat.id_for_label }}">Soatlik narx (UZS)</label><br>
+        {{ form.narx_soat }}
+        {% if form.narx_soat.errors %}<div style="color:red">{{ form.narx_soat.errors }}</div>{% endif %}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.mavjud.id_for_label }}">Mavjud</label><br>
+        {{ form.mavjud }}
+        {% if form.mavjud.errors %}<div style="color:red">{{ form.mavjud.errors }}</div>{% endif %}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.rasm.id_for_label }}">Rasm (ixtiyoriy)</label><br>
+        {{ form.rasm }}
+        {% if form.rasm.errors %}<div style="color:red">{{ form.rasm.errors }}</div>{% endif %}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="{{ form.tavsif.id_for_label }}">Tavsif</label><br>
+        {{ form.tavsif }}
+        {% if form.tavsif.errors %}<div style="color:red">{{ form.tavsif.errors }}</div>{% endif %}
+      </div>
+
+      <button type="submit">Saqlash</button>
+    </form>
+
+    <p style="margin-top:14px;"><a href="{% url 'skuter_list' %}">Ortga</a></p>
+  </main>
+</body>
+</html>
