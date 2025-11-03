@@ -1,71 +1,175 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Skuter qo'shish</title>
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <!-- Istasangiz Bootstrap yoki Tailwind qo'shishingiz mumkin -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛵 Skuter Arenda | Bosh sahifa</title>
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background: linear-gradient(180deg, #e0f2fe, #f8fafc);
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0284c7, #0ea5e9);
+      color: #fff;
+      text-align: center;
+      padding: 25px 10px;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #cbd5e1;
+      display: block;
+    }
+
+    .card-body {
+      padding: 15px 18px;
+    }
+
+    .card-body h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #0f172a;
+    }
+
+    .model {
+      color: #64748b;
+      margin-top: 3px;
+      font-size: 0.95rem;
+    }
+
+    .price {
+      color: #0ea5e9;
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 1.05rem;
+    }
+
+    .desc {
+      color: #475569;
+      font-size: 0.9rem;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .btn-call {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 14px;
+      padding: 10px 0;
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
+      color: #fff;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .btn-call:hover {
+      background: linear-gradient(90deg, #0284c7, #0369a1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 10px;
+      color: #475569;
+      font-size: 0.95rem;
+      background: #f1f5f9;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 50px;
+    }
+
+    footer a {
+      color: #0284c7;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.3rem;
+        padding: 18px 5px;
+      }
+      .card img {
+        height: 160px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main style="max-width:720px;margin:40px auto;padding:16px;border:1px solid #eee;border-radius:8px;">
-    <h1>Yangi skuter qo'shish</h1>
+  <header>
+    🛵 Skuter Arenda
+  </header>
 
-    {% if form.non_field_errors %}
-      <div style="color:red;margin-bottom:12px;">
-        {{ form.non_field_errors }}
+  <main>
+    {% if skuterlars %}
+      <div class="grid">
+        {% for skuter in skuterlars %}
+        <div class="card">
+          {% if skuter.rasm %}
+            <img src="{{ skuter.rasm.url }}" alt="{{ skuter.nom }}">
+          {% else %}
+            <img src="{% static 'images/noimage.png' %}" alt="No image">
+          {% endif %}
+          <div class="card-body">
+            <h3>{{ skuter.nom }}</h3>
+            <p class="model">{{ skuter.model }}</p>
+            <p class="price">{{ skuter.narx_soat }} so‘m / kun</p>
+            <p class="desc">{{ skuter.tavsif|truncatewords:12 }}</p>
+            <a class="btn-call" href="tel:+998979428976">📞 Bog‘lanish</a>
+          </div>
+        </div>
+        {% endfor %}
       </div>
+    {% else %}
+      <p style="text-align:center; margin-top:40px; font-size:1.1rem;">Hozircha skuterlar yo‘q 😢</p>
     {% endif %}
-
-    <form method="post" enctype="multipart/form-data" novalidate>
-      {% csrf_token %}
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.nom.id_for_label }}">Nomi</label><br>
-        {{ form.nom }}
-        {% if form.nom.errors %}<div style="color:red">{{ form.nom.errors }}</div>{% endif %}
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.model.id_for_label }}">Modeli</label><br>
-        {{ form.model }}
-        {% if form.model.errors %}<div style="color:red">{{ form.model.errors }}</div>{% endif %}
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.yil.id_for_label }}">Yili</label><br>
-        {{ form.yil }}
-        {% if form.yil.errors %}<div style="color:red">{{ form.yil.errors }}</div>{% endif %}
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.narx_soat.id_for_label }}">Soatlik narx (UZS)</label><br>
-        {{ form.narx_soat }}
-        {% if form.narx_soat.errors %}<div style="color:red">{{ form.narx_soat.errors }}</div>{% endif %}
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.mavjud.id_for_label }}">Mavjud</label><br>
-        {{ form.mavjud }}
-        {% if form.mavjud.errors %}<div style="color:red">{{ form.mavjud.errors }}</div>{% endif %}
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.rasm.id_for_label }}">Rasm (ixtiyoriy)</label><br>
-        {{ form.rasm }}
-        {% if form.rasm.errors %}<div style="color:red">{{ form.rasm.errors }}</div>{% endif %}
-      </div>
-
-      <div style="margin-bottom:10px;">
-        <label for="{{ form.tavsif.id_for_label }}">Tavsif</label><br>
-        {{ form.tavsif }}
-        {% if form.tavsif.errors %}<div style="color:red">{{ form.tavsif.errors }}</div>{% endif %}
-      </div>
-
-      <button type="submit">Saqlash</button>
-    </form>
-
-    <p style="margin-top:14px;"><a href="{% url 'skuter_list' %}">Ortga</a></p>
   </main>
+
+  <footer>
+    © 2025 Skuter Arenda. Aloqa:
+    <a href="tel:+998979428976">+998 97 942 89 76</a>
+  </footer>
+
+  <script>
+    console.log("Skuter arenda sahifasi yuklandi ✅");
+  </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import home,skuter_qosh
+from . import views
 
 urlpatterns = [
-    path("",home,name="saxifa"),
-    path('skuterqosh/', skuter_qosh, name='skuter_qosh'),
+    path('', views.home, name='index'),           # ← bu endi asosiy sahifa
+    path('skuterqosh/', views.skuter_qosh, name='skuter_qosh'),
 ]
